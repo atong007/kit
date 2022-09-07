@@ -1,7 +1,6 @@
 package config
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/spf13/viper"
 )
@@ -9,7 +8,7 @@ import (
 type Config struct {
 }
 
-func LoadAndRead[T json.Unmarshaler](file string) (*T, error) {
+func LoadAndRead[T any](file string) (*T, error) {
 	viper.SetConfigFile(file)
 	if err := viper.ReadInConfig(); err != nil {
 		return nil, fmt.Errorf("error loading config file: %w", err)
