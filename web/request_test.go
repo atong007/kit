@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-type Response[T any] struct {
+type HttpResp[T any] struct {
 	Code int    `json:"code"`
 	Msg  string `json:"msg"`
 	Data T      `json:"data"`
@@ -39,7 +39,7 @@ func TestRequest_Get(t *testing.T) {
 				respBytes: []byte(`{"code": 200, "msg": "ok", "data": {"val": 1}}`),
 			},
 			200,
-			Response[Data]{
+			HttpResp[Data]{
 				Code: 200,
 				Msg:  "ok",
 				Data: Data{Val: 1},
@@ -52,7 +52,7 @@ func TestRequest_Get(t *testing.T) {
 				respBytes: []byte(`{"code": 400, "msg": "request failed", "data": {}}`),
 			},
 			400,
-			Response[Data]{
+			HttpResp[Data]{
 				Code: 400,
 				Msg:  "request failed",
 				Data: Data{},
@@ -69,7 +69,7 @@ func TestRequest_Get(t *testing.T) {
 			}))
 			defer ts.Close()
 
-			gotCode, gotResp, err := NewReq[Response[Data]]().Get(ts.URL)
+			gotCode, gotResp, err := NewReq[HttpResp[Data]]().Get(ts.URL)
 			assert.Equal(t, tt.wantCode, gotCode)
 			assert.Equal(t, tt.wantResp, gotResp)
 			if tt.wantErr {
@@ -105,7 +105,7 @@ func TestRequest_Post(t *testing.T) {
 				respBytes: []byte(`{"code": 200, "msg": "ok", "data": {"val": 1}}`),
 			},
 			200,
-			Response[Data]{
+			HttpResp[Data]{
 				Code: 200,
 				Msg:  "ok",
 				Data: Data{Val: 1},
@@ -122,7 +122,7 @@ func TestRequest_Post(t *testing.T) {
 				respBytes: []byte(`{"code": 400, "msg": "request failed", "data": {}}`),
 			},
 			400,
-			Response[Data]{
+			HttpResp[Data]{
 				Code: 400,
 				Msg:  "request failed",
 				Data: Data{},
@@ -144,7 +144,7 @@ func TestRequest_Post(t *testing.T) {
 			}))
 			defer ts.Close()
 
-			gotCode, gotResp, err := NewReq[Response[Data]]().SetBody(tt.args.body).Post(ts.URL)
+			gotCode, gotResp, err := NewReq[HttpResp[Data]]().SetBody(tt.args.body).Post(ts.URL)
 			assert.Equal(t, tt.wantCode, gotCode)
 			assert.Equal(t, tt.wantResp, gotResp)
 			if tt.wantErr {
