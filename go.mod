@@ -1,4 +1,4 @@
-module kit
+module github.com/atong007/kit
 
 go 1.19
 
