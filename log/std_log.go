@@ -12,6 +12,7 @@ func New() *StdLog {
 	logger, _ := zap.NewDevelopment()
 	defer logger.Sync()
 	sugar := logger.Sugar()
+	zap.AddCallerSkip(1)
 	return &StdLog{log: sugar}
 }
 
