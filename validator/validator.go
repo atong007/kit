@@ -1,11 +1,12 @@
 package validator
 
 import (
-	"github.com/go-playground/validator/v10"
 	"log"
 	"reflect"
 	"regexp"
 	"strings"
+
+	"github.com/go-playground/validator/v10"
 
 	"github.com/go-playground/locales/zh"
 	zhTrans "github.com/go-playground/validator/v10/translations/zh"
@@ -88,8 +89,9 @@ func validateMobile(fl validator.FieldLevel) bool {
 	}
 
 	countryCode := reflect.Indirect(fl.Top()).FieldByName("CountryCode")
+	// if not set country code, use default 86
 	if !countryCode.IsValid() {
-		return false
+		countryCode = reflect.ValueOf("86")
 	}
 	pattern, ok := patterns[countryCode.String()]
 	if !ok {
@@ -97,8 +99,9 @@ func validateMobile(fl validator.FieldLevel) bool {
 	}
 
 	matched, err := regexp.MatchString(pattern, fl.Field().String())
-	if matched == false || err != nil {
+	if err != nil {
+		log.Printf("error matching mobile: %v\n", err)
 		return false
 	}
-	return true
+	return matched
 }
