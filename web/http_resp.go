@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Response struct {
@@ -20,6 +21,9 @@ type ErrResponse struct {
 }
 
 func Success(ctx *gin.Context, data interface{}) {
+	if data == nil {
+		data = gin.H{}
+	}
 	ctx.JSON(http.StatusOK, &Response{
 		Code: http.StatusOK,
 		Msg:  "success",
